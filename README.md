@@ -154,7 +154,7 @@ npx truffle migrate --reset --network development
 PORT=3000
 GANACHE_HOST=127.0.0.1
 GANACHE_PORT=7545
-TOKEN_CONTRACT_ADDRESS=ВАШ_АДРЕС_КОНТРАКТА
+TOKEN_CONTRACT_ADDRESS=ВАШ_АДРЕС_КОНТРАКТА (0x...)
 SESSION_SECRET=your_secret_key
 ```
 
@@ -163,8 +163,20 @@ SESSION_SECRET=your_secret_key
 
 ```bash id="u2v8nr"
 cd ai_service
+venv\Scripts\activate
 python app.py
 ```
+Package      Version
+------------ -------
+blinker      1.9.0
+click        8.3.2
+colorama     0.4.6
+Flask        3.0.3
+itsdangerous 2.2.0
+Jinja2       3.1.6
+MarkupSafe   3.0.3
+pip          25.3
+Werkzeug     3.1.8
 
 
 ## 8. Запустить основной сервер
