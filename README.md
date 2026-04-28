@@ -166,6 +166,7 @@ cd ai_service
 venv\Scripts\activate
 python app.py
 ```
+```bash id="u2v8nr"
 Package      Version
 ------------ -------
 blinker      1.9.0
@@ -177,7 +178,7 @@ Jinja2       3.1.6
 MarkupSafe   3.0.3
 pip          25.3
 Werkzeug     3.1.8
-
+```
 
 ## 8. Запустить основной сервер
 
