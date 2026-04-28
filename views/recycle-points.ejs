@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Передать вещь | ReUsePoints</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+.recycling-page .mascot-bubble::after{
+  display:none;
+}
+  </style>
+</head>
+<body class="recycling-page">
+  <div class="page">
+    <div class="container">
+
+      <div class="header">
+        <div class="header-brand">
+          <img src="/logo.png" alt="ReUsePoints" class="lk-logo" style="width: 150px; height: 100px; object-fit: contain;">
+          <div>
+            <h1>ReUsePoints</h1>
+            <p>Передача вещей</p>
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <a href="/lk" class="btn btn-secondary">Личный кабинет</a>
+          <a href="/partners" class="btn btn-secondary">Бонусы</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="grid-2">
+          <div>
+            <div class="badge">Новая передача</div>
+            <h2 class="section-title" style="margin-top:16px; margin-bottom:12px;">Передать вещь</h2>
+            <div class="item-text">
+              Заполните данные о вещи и получите токены ReUse за передачу.
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:flex-end;">
+            <div style="background:var(--surface-soft); border-radius:24px; padding:22px 24px; min-width:260px;">
+              <div class="metric-title">Ваш баланс</div>
+              <div class="metric-value"><%= tokenBalance %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="align-items:start;">
+        <div class="card">
+          <% if (error) { %>
+            <div class="alert alert-error"><%= error %></div>
+          <% } %>
+
+          <% if (message) { %>
+            <div class="alert alert-success"><%= message %></div>
+          <% } %>
+
+          <form action="/recycle-submit" method="POST">
+            <label class="form-label">Название вещи</label>
+            <input
+              class="input"
+              type="text"
+              name="title"
+              placeholder="Например: куртка, книга, стул"
+              required
+            />
+
+            <label class="form-label">Категория</label>
+            <select class="select" name="category" required>
+              <option value="">Выберите категорию</option>
+              <option value="Одежда">Одежда</option>
+              <option value="Книги">Книги</option>
+              <option value="Обувь">Обувь</option>
+              <option value="Игрушки">Игрушки</option>
+              <option value="Электроника">Электроника</option>
+              <option value="Для дома">Для дома</option>
+            </select>
+
+            <label class="form-label">Количество</label>
+            <input
+              class="input"
+              type="number"
+              name="quantity"
+              placeholder="Введите количество"
+              min="1"
+              required
+            />
+
+            <div class="row-actions">
+              <button class="btn btn-primary" type="submit">Передать вещь</button>
+              <a href="/lk" class="btn btn-secondary">Отмена</a>
+            </div>
+          </form>
+        </div>
+
+        <div class="card mascot-card" style="grid-template-columns: 1fr; gap:18px;">
+          <div>
+            <div class="badge">ReUse AI помощник</div>
+            <h2 class="section-title" style="margin-top:14px;">Подсказка</h2>
+            <div class="mascot-bubble" style="margin-top:0;">
+              <strong><%= aiAdvice.title %>:</strong>
+              <br><br>
+              <%= aiAdvice.text %>
+            </div>
+          </div>
+
+          <div class="mascot-image-side">
+            <img src="/maskot.png" alt="AI помощник">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="badge">Пункты приёма</div>
+        <h2 class="section-title" style="margin-top:16px;">Ближайшие пункты передачи вещей</h2>
+        <div class="item-text" style="margin-bottom:18px;">
+          Выберите удобный пункт и постройте маршрут на карте.
+        </div>
+
+        <% pickupPoints.forEach(function(point){ %>
+          <div class="bonus-item">
+            <div class="item-title"><%= point.name %></div>
+            <div class="item-text"><strong>Адрес:</strong> <%= point.address %></div>
+            <div class="item-text"><strong>Часы работы:</strong> <%= point.hours %></div>
+            <div class="item-text"><strong>Принимают:</strong> <%= point.categories %></div>
+
+            <div class="row-actions" style="margin-top:12px;">
+              <a href="<%= point.mapUrl %>" target="_blank" class="btn btn-secondary">Открыть на карте</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

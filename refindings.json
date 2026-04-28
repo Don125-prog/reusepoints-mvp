@@ -1,0 +1,26 @@
+[
+  {
+    "userAccount": "0x42Cc972A3169Bd0986e0582175b0d8AB7597A19A",
+    "title": "куртка",
+    "category": "Одежда",
+    "quantity": 1,
+    "reward": 10,
+    "date": "2026-04-23T15:43:37.808Z"
+  },
+  {
+    "userAccount": "0x42Cc972A3169Bd0986e0582175b0d8AB7597A19A",
+    "title": "стул",
+    "category": "Для дома",
+    "quantity": 2,
+    "reward": 20,
+    "date": "2026-04-23T15:44:33.359Z"
+  },
+  {
+    "userAccount": "0x42Cc972A3169Bd0986e0582175b0d8AB7597A19A",
+    "title": "книга",
+    "category": "Книги",
+    "quantity": 5,
+    "reward": 50,
+    "date": "2026-04-23T15:45:14.790Z"
+  }
+]

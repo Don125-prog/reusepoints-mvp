@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Личный кабинет | ReUsePoints</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+
+      <div class="header">
+        <div class="header-brand">
+          <img src="/logo.png" alt="ReUsePoints" class="lk-logo" style="width: 150px; height: 100px; object-fit: contain;">
+          <div>
+            <h1>ReUsePoints</h1>
+            <p>Личный кабинет пользователя</p>
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <a href="/recycle-points" class="btn btn-secondary">Передать вещь</a>
+          <a href="/partners" class="btn btn-secondary">Бонусы</a>
+          <a href="/logout" class="btn btn-danger">Выйти</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="grid-2">
+          <div>
+            <div class="badge">Профиль пользователя</div>
+            <h2 class="section-title" style="margin-top:16px; margin-bottom:12px;">Добро пожаловать</h2>
+            <div class="item-text"><strong>Email:</strong> <%= user.email %></div>
+            <div class="item-text"><strong>Blockchain:</strong> <%= user.account %></div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:flex-end;">
+            <div style="background:var(--surface-soft); border-radius:24px; padding:22px 24px; min-width:260px;">
+              <div class="metric-title">Текущий статус</div>
+              <div class="metric-value"><%= reuseScore %>/100</div>
+              <div class="metric-note"><%= reuseComment %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="metric-title">Баланс токенов</div>
+          <div class="metric-value"><%= tokenBalance %></div>
+          <div class="metric-note">Накопленные токены ReUse</div>
+        </div>
+
+        <div class="card">
+          <div class="metric-title">Количество операций</div>
+          <div class="metric-value"><%= transactions ? transactions.length : 0 %></div>
+          <div class="metric-note">Все действия в системе</div>
+        </div>
+
+        <div class="card">
+          <div class="metric-title">Выполнено достижений</div>
+          <div class="metric-value">
+            <%= achievements.filter(item => item.completed).length %>/<%= achievements.length %>
+          </div>
+          <div class="metric-note">Ваш прогресс в ReUsePoints</div>
+        </div>
+      </div>
+      
+      <div class="card mascot-card">
+        <div class="mascot-dialog-side">
+        <div class="badge">ReUse AI помощник</div>
+        <h2 class="section-title" style="margin-top:14px;">Совет дня</h2>
+
+        <div class="mascot-bubble">
+          <strong><%= aiAdvice.title %>:</strong>
+          <br><br>
+          <%= aiAdvice.text %>
+        </div>
+      </div>
+
+  <div class="mascot-image-side">
+    <img src="/maskot.png" alt="AI помощник">
+  </div>
+</div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2 class="section-title">Достижения</h2>
+
+          <% achievements.forEach(function(item){ %>
+            <div class="achievement-item">
+              <div class="item-title"><%= item.title %></div>
+              <div class="item-text"><%= item.description || '' %></div>
+              <div class="badge">
+                <%= item.completed ? 'Выполнено' : 'Прогресс: ' + Math.round(item.progress) + '%' %>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">История операций</h2>
+
+          <% if (!transactions || transactions.length === 0) { %>
+            <div class="item-text">Пока нет операций.</div>
+          <% } else { %>
+            <% transactions.forEach(function(tx){ %>
+              <div class="transaction-item">
+                <div class="item-title"><%= tx.type %></div>
+                <div class="item-text"><%= tx.partner %></div>
+                <div class="item-amount"><%= tx.amount %></div>
+              </div>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">Быстрые действия</h2>
+        <div class="row-actions">
+          <a href="/recycle-points" class="btn btn-primary">Передать вещь</a>
+          <a href="/partners" class="btn btn-secondary">Открыть бонусы</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

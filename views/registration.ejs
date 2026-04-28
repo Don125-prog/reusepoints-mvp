@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Регистрация | ReUsePoints</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="center-page">
+    <div class="auth-shell">
+      <div class="brand-panel">
+        <img src="/logo.png" alt="ReUsePoints" class="brand-logo">
+        <h1 class="brand-title">ReUsePoints</h1>
+        <p class="brand-subtitle">Передай ценное. Измени будущее.</p>
+
+        <div class="brand-features">
+          <div class="brand-feature">Подари новую жизнь</div>
+          <div class="brand-feature">Делись с пользой</div>
+          <div class="brand-feature">Объединяйся</div>
+          <div class="brand-feature">Зарабатывай</div>
+        </div>
+      </div>
+
+      <div class="form-panel">
+        <div class="form-card">
+          <h2 class="form-title">Создать аккаунт</h2>
+          <p class="form-subtitle">Зарегистрируйтесь и начните передавать вещи с пользой, даря им новую жизнь.</p>
+
+          <% if (error) { %>
+            <div class="alert alert-error"><%= error %></div>
+          <% } %>
+
+          <% if (message) { %>
+            <div class="alert alert-success"><%= message %></div>
+          <% } %>
+
+          <form action="/register" method="POST">
+            <label class="form-label">Email</label>
+            <input
+              class="input"
+              type="email"
+              name="email"
+              placeholder="yourmail@example.com"
+              required
+            />
+
+            <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+          </form>
+
+          <div class="link-row">
+            Уже есть аккаунт? <a href="/auth">Войти</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

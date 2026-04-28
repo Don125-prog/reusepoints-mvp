@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Партнёры и бонусы | ReUsePoints</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="container">
+
+      <div class="header">
+        <div class="header-brand">
+          <img src="/logo.png" alt="ReUsePoints" class="lk-logo" style="width: 150px; height: 100px; object-fit: contain;">
+          <div>
+            <h1>ReUsePoints</h1>
+            <p>Партнёры и бонусы</p>
+          </div>
+        </div>
+
+        <div class="row-actions">
+          <a href="/lk" class="btn btn-secondary">Личный кабинет</a>
+          <a href="/recycle-points" class="btn btn-secondary">Передать вещь</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="grid-2">
+          <div>
+            <div class="badge">Каталог бонусов</div>
+            <h2 class="section-title" style="margin-top:16px; margin-bottom:12px;">Доступные предложения</h2>
+            <div class="item-text">
+              Обменивайте накопленные токены на скидки и подарки от партнёров.
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:flex-end;">
+            <div style="background:var(--surface-soft); border-radius:24px; padding:22px 24px; min-width:260px;">
+              <div class="metric-title">Ваш баланс</div>
+              <div class="metric-value"><%= tokenBalance %></div>
+              <div class="metric-note">Токены ReUse доступны для обмена</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <% if (error) { %>
+          <div class="alert alert-error"><%= error %></div>
+        <% } %>
+
+        <% if (message) { %>
+          <div class="alert alert-success"><%= message %></div>
+        <% } %>
+
+        <% if (!partners.length) { %>
+          <div class="item-text">Пока бонусов нет.</div>
+        <% } %>
+
+        <% partners.forEach(function(partner){ %>
+          <div class="bonus-item">
+            <div class="item-title"><%= partner.name %></div>
+            <div class="item-text">Стоимость: <strong><%= partner.tokens %> токенов</strong></div>
+
+            <form action="/purchase-bonus" method="POST" style="margin-top:12px;">
+              <input type="hidden" name="partnerId" value="<%= partner.id %>">
+              <button class="btn btn-primary" type="submit">Купить бонус</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
