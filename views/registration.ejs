@@ -44,6 +44,17 @@
               placeholder="yourmail@example.com"
               required
             />
+            <label class="form-label">Пароль</label>
+            <input
+              class="input"
+              type="password"
+              name="password"
+              placeholder="Пример:Greennn2"
+              minlength="8"
+              pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+              title="Пароль должен содержать минимум 8 символов, одну цифру и одну заглавную букву"
+              required
+            />            
 
             <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
           </form>

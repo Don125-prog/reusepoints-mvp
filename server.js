@@ -10,10 +10,20 @@ const {
   spendUserTokens
 } = require('./blockchain');
 require('dotenv').config();
-
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 const app = express();
 const port = process.env.PORT || 3000;
 
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
 const USERS_FILE = path.join(__dirname, 'users.json');
 const TRANSFERS_FILE = path.join(__dirname, 'refindings.json');
 const PARTNERS_FILE = path.join(__dirname, 'partners.json');
@@ -198,12 +208,17 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     req.session.error = 'Пожалуйста, введите корректный email';
     return res.redirect('/register');
   }
+
+   if (!password || !/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    req.session.error = 'Пароль должен содержать минимум 8 символов, одну цифру и одну заглавную букву';
+    return res.redirect('/register');
+   }
 
   const users = await readData(USERS_FILE);
 
@@ -239,9 +254,11 @@ try {
   req.session.error = 'Не удалось получить адрес из Ganache. Проверьте, что Ganache запущен.';
   return res.redirect('/register');
 }
-
+  const passwordHash = await bcrypt.hash(password, 10);
+  
   const newUser = {
     email,
+    passwordHash,
     account,
     createdAt: new Date().toISOString(),
     tokenBalance: 0
@@ -249,6 +266,21 @@ try {
 
   users.push(newUser);
   await writeData(USERS_FILE, users);
+
+  try {
+    await transporter.sendMail({
+      from: '"ReUsePoints" <no-reply@reusepoints.local>',
+      to: email,
+      subject: 'Регистрация в ReUsePoints',
+      text:
+        `Регистрация завершена.\n\n` +
+        `Ваш blockchain-аккаунт: ${account}\n` +
+        `Пароль: ${password}`
+    });
+    console.log('Письмо успешно отправлено');
+  } catch (error) {
+    console.error('Ошибка отправки email:', error.message);
+  }  
 
   req.session.message = `Регистрация успешна. Ваш blockchain-аккаунт: ${account}`;
   res.redirect('/auth');
@@ -267,7 +299,7 @@ app.get('/auth', (req, res) => {
 });
 
 app.post('/auth', async (req, res) => {
-  const { email, blockchain_account } = req.body;
+  const { email, blockchain_account, password } = req.body;
 
   const users = await readData(USERS_FILE);
   const user = users.find(
@@ -278,6 +310,16 @@ app.post('/auth', async (req, res) => {
     req.session.error = 'Неверный email или blockchain-аккаунт';
     return res.redirect('/auth');
   }
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    user.passwordHash
+  );
+
+  if (!isPasswordValid) {
+    req.session.error = 'Неверный пароль';
+    return res.redirect('/auth');
+  }
+
 
   req.session.user = {
     email: user.email,
