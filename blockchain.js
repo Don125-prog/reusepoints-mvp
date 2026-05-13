@@ -29,35 +29,32 @@ async function getTokenSymbol() {
   return await contract.methods.symbol().call();
 }
 
+// начисление токенов пользователю
 async function rewardUser(to, amount) {
   const accounts = await web3.eth.getAccounts();
-  const from = accounts[0];
-
-  const decimals = 10n ** 18n;
-  const value = BigInt(amount) * decimals;
+  const owner = accounts[0];
 
   return await contract.methods
-    .transfer(to, value.toString())
+    .rewardUser(to, amount)
     .send({
-      from,
+      from: owner,
       gas: 200000
     });
 }
 
-async function spendUserTokens(from, amount) {
+// сжигание токенов пользователя
+async function spendUserTokens(user, amount) {
   const accounts = await web3.eth.getAccounts();
-  const platformWallet = accounts[0];
-
-  const decimals = 10n ** 18n;
-  const value = BigInt(amount) * decimals;
+  const owner = accounts[0];
 
   return await contract.methods
-    .transfer(platformWallet, value.toString())
+    .burnUserTokens(user, amount)
     .send({
-      from,
+      from: owner,
       gas: 200000
     });
 }
+
 module.exports = {
   web3,
   contract,
